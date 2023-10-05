@@ -1,5 +1,7 @@
-export default function ListTodos() {
-  const todos = [];
+import { getTodos } from "./todo.service";
+
+export default async function ListTodos() {
+  const todos = await getTodos();
   return (
     <div>
       <h3>List of todos</h3>

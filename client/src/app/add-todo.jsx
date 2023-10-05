@@ -1,14 +1,31 @@
 "use client";
 
 import { useState } from "react";
+import { addTodo } from "./todo.service";
+import { useRouter } from "next/navigation";
 
 export default function AddTodo() {
+  const route = useRouter();
   const [description, setDescription] = useState("");
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
-    alert(`submit ${description}`);
+    await fetch("/api/todo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: new Date().getTime(),
+        description,
+        completed: "no",
+        userId: 1,
+      }),
+    });
+
     setDescription("");
+    route.refresh();
+    route.push("/");
   }
 
   return (
