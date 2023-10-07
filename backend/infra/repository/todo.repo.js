@@ -1,9 +1,10 @@
+import { TodoFirestoreRepository } from "./firestore/todo-firestore.repo";
 import { TodoInMemoryRepository } from "./local/todo-in-memory.repo";
 
 export class TodoRepository {
   static _instance;
   /**
-   * @type {TodoInMemoryRepository}
+   * @type {TodoInMemoryRepository | TodoFirestoreRepository}
    */
   repo;
 
@@ -11,6 +12,9 @@ export class TodoRepository {
     switch (type) {
       case "local":
         this.repo = TodoInMemoryRepository.Instance(userId);
+        break;
+      case "firestore":
+        this.repo = TodoFirestoreRepository.Instance(userId);
         break;
       default:
         throw Error("not valid repo!");
