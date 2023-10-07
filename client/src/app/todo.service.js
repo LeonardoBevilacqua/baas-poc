@@ -1,10 +1,11 @@
 import { TodoRepository } from "backend/infra/repository/todo.repo";
+const driver = "firestore";
 export async function getTodos() {
-  const todoRepo = TodoRepository.Instance("local", 1);
-  return await todoRepo.findAll();
+  const todoRepo = TodoRepository.Instance(driver, 1);
+  return await todoRepo.findAll() ?? [];
 }
 
 export async function addTodo(todo) {
-  const todoRepo = TodoRepository.Instance("local", 1);
+  const todoRepo = TodoRepository.Instance(driver, 1);
   return await todoRepo.insert(todo);
 }
