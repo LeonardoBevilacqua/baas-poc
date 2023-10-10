@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "encoding": "^0.1.13",
     "firebase": "^10.4.0"
   }
 }
