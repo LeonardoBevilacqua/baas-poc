@@ -1,5 +1,4 @@
 "use client";
-import { EmailIdentity } from "backend/infra/identity/email.identity";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -21,12 +20,7 @@ export default function Signup() {
       }),
     });
 
-    if (error) {
-      return console.log(error);
-    }
-
     // else successful
-    console.log(result);
     return router.push("/");
   };
   return (

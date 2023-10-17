@@ -10,3 +10,7 @@ export async function signUp(email, password) {
 export async function signIn(email, password) {
   return await identity.signIn(email, password);
 }
+
+export async function isUserLogged() {
+  return await identity.isUserLogged();
+}

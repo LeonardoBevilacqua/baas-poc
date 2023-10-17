@@ -7,5 +7,5 @@ export async function POST(request) {
 }
 
 export async function GET() {
-  return Response.json({ message: "Hello world" });
+  return Response.json(await getTodos(), { status: 200 });
 }
