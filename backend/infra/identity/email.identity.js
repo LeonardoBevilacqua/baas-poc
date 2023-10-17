@@ -35,4 +35,10 @@ export class EmailIdentity {
   async signUp(email, password) {
     return this.repo.signUp(email, password);
   }
+  async isUserLogged() {
+    return this.repo.isUserLogged();
+  }
+  async signOutUser() {
+    this.repo.signOutUser();
+  }
 }

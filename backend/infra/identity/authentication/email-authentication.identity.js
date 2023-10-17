@@ -2,6 +2,7 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import firebase_app from "../../firebase/config";
 
@@ -45,5 +46,15 @@ export class EmailAuthenticationIdentity {
     }
 
     return { result, error };
+  }
+
+  async isUserLogged() {
+    const currentUser = this.auth.currentUser;
+    console.log("current user", currentUser);
+    return !!currentUser;
+  }
+
+  async signOutUser() {
+    await signOut(this.auth);
   }
 }

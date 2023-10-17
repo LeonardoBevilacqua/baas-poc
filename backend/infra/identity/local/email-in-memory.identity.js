@@ -16,4 +16,12 @@ export class EmailInMemoryIdentity {
   async signUp(email, password) {
     return;
   }
+
+  async isUserLogged() {
+    return false;
+  }
+
+  async signOutUser() {
+    return;
+  }
 }
