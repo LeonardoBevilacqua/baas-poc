@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { EmailIdentity } from "backend/infra/identity/email.identity";
 
 export default function Signin() {
   const [email, setEmail] = useState("");
@@ -10,16 +9,26 @@ export default function Signin() {
 
   const handleForm = async (event) => {
     event.preventDefault();
-    const identity = EmailIdentity.Instance("firebase");
+    // const identity = EmailIdentity.Instance("firebase");
 
-    const { result, error } = await identity.signIn(email, password);
+    // const { result, error } = await identity.signIn(email, password);
 
-    if (error) {
-      return console.log(error);
-    }
+    // if (error) {
+    //   return console.log(error);
+    // }
 
-    // else successful
-    console.log(result);
+    // // else successful
+    // console.log(result);
+    await fetch("/api/identity/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
     return router.push("/");
   };
   return (

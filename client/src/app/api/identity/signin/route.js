@@ -1,7 +1,14 @@
 import { signIn } from "@/app/identity.service";
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const body = await request.json();
-  await signIn(body.email, body.password);
-  return Response.json({}, { status: 200 });
+  const result = await signIn(body.email, body.password);
+  const response = NextResponse.json({}, { status: 200 });
+  response.cookies.set({
+    name: "token",
+    value: await response.result.user.getIdToken(),
+    path: "/",
+  });
+  return response;
 }

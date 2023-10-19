@@ -38,6 +38,9 @@ export class EmailIdentity {
   async isUserLogged() {
     return this.repo.isUserLogged();
   }
+  async isUserLogged2(idToken) {
+    return this.repo.isUserLogged2(idToken);
+  }
   async signOutUser() {
     this.repo.signOutUser();
   }
