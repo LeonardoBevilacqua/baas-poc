@@ -5,7 +5,7 @@ import {
   getFirestore,
   setDoc,
 } from "firebase/firestore";
-import firebase_app from "../../firebase/config";
+import { firebase_app } from "../../firebase/config";
 
 export class TodoFirestoreRepository {
   static _instance;

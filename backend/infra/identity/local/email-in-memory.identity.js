@@ -17,10 +17,6 @@ export class EmailInMemoryIdentity {
     return;
   }
 
-  async isUserLogged() {
-    return false;
-  }
-
   async signOutUser() {
     return;
   }

@@ -4,21 +4,14 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import firebase_app from "../../firebase/config";
-import admin from "firebase-admin";
-import firebaseKey from "../../../firebase-key.json";
+import { firebase_app } from "../../firebase/config";
 
 export class EmailAuthenticationIdentity {
   static _instance;
   auth;
-  adminAuth;
 
   constructor() {
     this.auth = getAuth(firebase_app);
-    const admin_firebase_app = admin.initializeApp({
-      credential: admin.credential.cert(firebaseKey),
-    });
-    this.adminAuth = admin.auth(admin_firebase_app);
   }
 
   /**
@@ -54,15 +47,6 @@ export class EmailAuthenticationIdentity {
     }
 
     return { result, error };
-  }
-
-  async isUserLogged(idToken) {
-    try {
-      const decodedToken = await this.adminAuth.verifyIdToken(idToken);
-      return !!decodedToken.uid;
-    } catch (error) {
-      return error;
-    }
   }
 
   async signOutUser() {
