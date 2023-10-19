@@ -1,7 +1,27 @@
-import { getTodos } from "./todo.service";
+import { cookies } from "next/headers";
 
 export default async function ListTodos() {
-  const todos = await getTodos();
+  const todos = await fetchTodos();
+
+  async function fetchTodos() {
+    try {
+      const token = cookies().get("token").value;
+      const response = await fetch("http://localhost:3000/api/todo", {
+        method: "GET",
+        headers: {
+          Cookie: `token=${token}`,
+        },
+        next: {
+          revalidate: 0,
+        },
+      });
+      return await response.json();
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
   return (
     <div>
       <h3>List of todos</h3>

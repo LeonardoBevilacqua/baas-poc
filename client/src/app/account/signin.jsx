@@ -9,16 +9,6 @@ export default function Signin() {
 
   const handleForm = async (event) => {
     event.preventDefault();
-    // const identity = EmailIdentity.Instance("firebase");
-
-    // const { result, error } = await identity.signIn(email, password);
-
-    // if (error) {
-    //   return console.log(error);
-    // }
-
-    // // else successful
-    // console.log(result);
     await fetch("/api/identity/signin", {
       method: "POST",
       headers: {

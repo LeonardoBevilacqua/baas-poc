@@ -37,7 +37,6 @@ export class EmailAuthenticationIdentity {
        * @type {import("firebase/auth").UserCredential}
        */
       result = await signInWithEmailAndPassword(this.auth, email, password);
-      console.log(result.user);
     } catch (e) {
       error = e;
     }
@@ -50,7 +49,6 @@ export class EmailAuthenticationIdentity {
       error = null;
     try {
       result = await createUserWithEmailAndPassword(this.auth, email, password);
-      console.log(result);
     } catch (e) {
       error = e;
     }
@@ -58,12 +56,7 @@ export class EmailAuthenticationIdentity {
     return { result, error };
   }
 
-  async isUserLogged() {
-    const currentUser = this.auth.currentUser;
-    console.log("current user", currentUser);
-    return !!currentUser;
-  }
-  async isUserLogged2(idToken) {
+  async isUserLogged(idToken) {
     try {
       const decodedToken = await this.adminAuth.verifyIdToken(idToken);
       return !!decodedToken.uid;
