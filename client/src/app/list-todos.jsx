@@ -1,25 +1,27 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function ListTodos() {
   const todos = await fetchTodos();
 
   async function fetchTodos() {
-    try {
-      const token = cookies().get("token").value;
-      const response = await fetch("http://localhost:3000/api/todo", {
-        method: "GET",
-        headers: {
-          Cookie: `token=${token}`,
-        },
-        next: {
-          revalidate: 0,
-        },
-      });
-      return await response.json();
-    } catch (error) {
-      console.error(error);
-      return null;
+    const token = cookies().get("token").value;
+    const response = await fetch("http://localhost:3000/api/todo", {
+      method: "GET",
+      headers: {
+        Cookie: `token=${token}`,
+      },
+      next: {
+        revalidate: 0,
+      },
+    });
+
+    if (response.status === 401) {
+      redirect("/account");
+      return [];
     }
+
+    return await response.json();
   }
 
   return (
