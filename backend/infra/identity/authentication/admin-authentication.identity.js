@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import { admin_firebase_app } from "../../firebase/config";
+import admin_firebase_app from "../../firebase/admin-config";
 
 export class AdminAuthenticationIdentity {
   static _instance;
@@ -22,7 +22,7 @@ export class AdminAuthenticationIdentity {
       const decodedToken = await this.adminAuth.verifyIdToken(idToken);
       return !!decodedToken.uid;
     } catch (error) {
-      return error;
+      return false;
     }
   }
 }

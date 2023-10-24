@@ -1,5 +1,4 @@
 // Import the functions you need from the SDKs you need
-import admin from "firebase-admin";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
@@ -12,6 +11,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const firebase_app = initializeApp(firebaseConfig);
-export const admin_firebase_app = admin.initializeApp(firebaseConfig);
+const firebase_app = initializeApp(firebaseConfig);
 
+export default firebase_app;

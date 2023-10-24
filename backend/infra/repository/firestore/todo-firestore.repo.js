@@ -1,21 +1,17 @@
-import {
-  collection,
-  doc,
-  getDocs,
-  getFirestore,
-  setDoc,
-} from "firebase/firestore";
-import { firebase_app } from "../../firebase/config";
+
+import { getFirestore } from "firebase-admin/firestore";
+import admin_firebase_app from "../../firebase/admin-config";
 
 export class TodoFirestoreRepository {
   static _instance;
   userId;
   database;
   collection = "todo";
+  admin = admin_firebase_app;
 
   constructor(userId) {
     this.userId = userId;
-    this.database = getFirestore(firebase_app);
+    this.database = getFirestore();
   }
 
   /**
@@ -32,17 +28,14 @@ export class TodoFirestoreRepository {
   }
 
   async insert(item) {
-    const reference = doc(this.database, this.collection, item.id.toString());
-    await setDoc(reference, item, {
-      merge: true,
-    });
+    const res = await this.database.collection(this.collection).add(item);
+
     return item;
   }
   async findAll() {
-    const querySnapshot = await getDocs(
-      collection(this.database, this.collection)
-    );
-    return querySnapshot.docs.map((doc) => doc.data());
+    const citiesRef = this.database.collection(this.collection);
+    const snapshot = await citiesRef.get();
+    return snapshot.docs.map((doc) => doc.data());
   }
   async findById(id) {
     throw Error("not implemented");

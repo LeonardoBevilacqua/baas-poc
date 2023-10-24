@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { firebase_app } from "../../firebase/config";
+import firebase_app from "../../firebase/config";
 
 export class EmailAuthenticationIdentity {
   static _instance;
