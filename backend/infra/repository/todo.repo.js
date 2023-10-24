@@ -2,19 +2,26 @@ import { TodoFirestoreRepository } from "./firestore/todo-firestore.repo";
 import { TodoInMemoryRepository } from "./local/todo-in-memory.repo";
 
 export class TodoRepository {
+  /**
+   * @type {TodoRepository}
+   */
   static _instance;
   /**
    * @type {TodoInMemoryRepository | TodoFirestoreRepository}
    */
   repo;
 
-  constructor(type, userId) {
+  /**
+   *
+   * @param {"local"|"firestore"} type
+   */
+  constructor(type) {
     switch (type) {
       case "local":
-        this.repo = TodoInMemoryRepository.Instance(userId);
+        this.repo = TodoInMemoryRepository.Instance();
         break;
       case "firestore":
-        this.repo = TodoFirestoreRepository.Instance(userId);
+        this.repo = TodoFirestoreRepository.Instance();
         break;
       default:
         throw Error("not valid repo!");
@@ -22,16 +29,10 @@ export class TodoRepository {
   }
 
   /**
-   *
-   * @param {number} userId user id
    * @returns {TodoInMemoryRepository}
    */
-  static Instance(type, userId) {
-    if (this._instance) {
-      this._instance.repo.userId = userId;
-      return this._instance;
-    }
-    return (this._instance = new this(type, userId));
+  static Instance(type) {
+    return this._instance ? this._instance : (this._instance = new this(type));
   }
 
   async insert(item) {
@@ -39,6 +40,9 @@ export class TodoRepository {
   }
   async findAll() {
     return this.repo.findAll();
+  }
+  async findAllByUser(userId) {
+    return this.repo.findAllByUser(userId);
   }
   async findById(id) {
     return this.repo.findById(id);

@@ -14,4 +14,8 @@ export class AdminInMemoryIdentity {
   async isUserLogged(idToken) {
     return false;
   }
+
+  async getLoggedUserUid(idToken) {
+    return "fake-id";
+  }
 }

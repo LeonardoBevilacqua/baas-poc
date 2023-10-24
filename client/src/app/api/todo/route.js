@@ -1,36 +1,38 @@
-import { addTodo, getTodos } from "@/app/todo.service";
+import { addTodo, getTodosByUser } from "@/app/todo.service";
 import { AdminIdentity } from "backend/infra/identity/admin.identity";
 import { NextResponse } from "next/server";
 
+const driver = "firebase";
+const adminIdentity = AdminIdentity.Instance(driver);
+
 export async function POST(request) {
-  if (!(await isTokenValid(request))) {
+  const token = request.cookies.get("token").value;
+  if (!(await isTokenValid(token))) {
     return Unauthorized();
   }
-  const body = await request.json();
+  const body = {
+    ...(await request.json()),
+    userId: await adminIdentity.getLoggedUserUid(token),
+  };
   const todo = await addTodo(body);
   return Response.json({ todo }, { status: 201 });
 }
 
-function Unauthorized() {
-  const response = NextResponse.json(null, { status: 401 });
-  response.cookies.delete("token");
-  return response;
-}
-
 export async function GET(request) {
-  if (!(await isTokenValid(request))) {
+  const token = request.cookies.get("token").value;
+  if (!(await isTokenValid(token))) {
     return Unauthorized();
   }
-  return Response.json(await getTodos(), { status: 200 });
+  return Response.json(
+    await getTodosByUser(await adminIdentity.getLoggedUserUid(token)),
+    { status: 200 }
+  );
 }
 
-async function isTokenValid(request) {
-  const token = request.cookies.get("token");
-  return !!token && (await isUserLogged(token.value));
+async function isTokenValid(token) {
+  return !!token && (await adminIdentity.isUserLogged(token));
 }
 
-async function isUserLogged(idToken) {
-  const driver = "firebase";
-  const adminIdentity = AdminIdentity.Instance(driver);
-  return await adminIdentity.isUserLogged(idToken);
+function Unauthorized() {
+  return NextResponse.json(null, { status: 401 });
 }

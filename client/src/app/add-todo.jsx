@@ -18,7 +18,6 @@ export default function AddTodo() {
         id: new Date().getTime(),
         description,
         completed: "no",
-        userId: 1,
       }),
     });
 

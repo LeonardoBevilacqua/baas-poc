@@ -25,4 +25,13 @@ export class AdminAuthenticationIdentity {
       return false;
     }
   }
+
+  async getLoggedUserUid(idToken) {
+    try {
+      const decodedToken = await this.adminAuth.verifyIdToken(idToken);
+      return decodedToken.uid;
+    } catch (error) {
+      return null;
+    }
+  }
 }

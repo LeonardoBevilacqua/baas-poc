@@ -18,6 +18,7 @@ export default async function ListTodos() {
 
     if (response.status === 401) {
       redirect("/account");
+    } else if (response.status === 500) {
       return [];
     }
 

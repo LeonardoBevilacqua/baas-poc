@@ -1,23 +1,12 @@
 export class TodoInMemoryRepository {
   static _instance;
   items = [];
-  userId;
-
-  constructor(userId) {
-    this.userId = userId;
-  }
 
   /**
-   *
-   * @param {number} userId user id
    * @returns {TodoInMemoryRepository}
    */
-  static Instance(userId) {
-    if (this._instance) {
-      this._instance.userId = userId;
-      return this._instance;
-    }
-    return (this._instance = new this(userId));
+  static Instance() {
+    return this._instance ? this._instance : (this._instance = new this());
   }
 
   async insert(item) {
@@ -25,33 +14,28 @@ export class TodoInMemoryRepository {
     return item;
   }
   async findAll() {
-    return this.filterByUserId();
+    return this.items;
+  }
+  async findAllByUser(userId) {
+    return this.filterByUserId(userId);
   }
   async findById(id) {
-    return this.filterByUserId().find((item) => item.id === id);
+    return this.items.find((item) => item.id === id);
   }
   async existsById(id) {
-    return this.filterByUserId().some((item) => item.id === id);
+    return this.items.some((item) => item.id === id);
   }
   async delete(id) {
-    if (!this.filterByUserId().length) {
-      throw new NotFoundError("Item does not exists");
-    }
     this.items = this.items.filter((item) => item.id !== id);
   }
   async update(item) {
-    if (!this.filterByUserId().length) {
-      throw new NotFoundError("Item does not exists");
-    }
     this.items = this.items.map((currentItem) =>
       currentItem.id === item.id ? item : currentItem
     );
     return item;
   }
 
-  filterByUserId() {
-    return this.items.filter(
-      (item) => Number(item.userId) === Number(this.userId)
-    );
+  filterByUserId(userId) {
+    return this.items.filter((item) => Number(item.userId) === Number(userId));
   }
 }

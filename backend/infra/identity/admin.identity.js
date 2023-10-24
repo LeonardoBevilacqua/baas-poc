@@ -32,4 +32,8 @@ export class AdminIdentity {
   async isUserLogged(idToken) {
     return this.repo.isUserLogged(idToken);
   }
+
+  async getLoggedUserUid(idToken) {
+    return this.repo.getLoggedUserUid(idToken);
+  }
 }

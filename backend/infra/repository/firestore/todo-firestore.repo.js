@@ -1,30 +1,21 @@
-
 import { getFirestore } from "firebase-admin/firestore";
 import admin_firebase_app from "../../firebase/admin-config";
 
 export class TodoFirestoreRepository {
   static _instance;
-  userId;
   database;
   collection = "todo";
   admin = admin_firebase_app;
 
-  constructor(userId) {
-    this.userId = userId;
+  constructor() {
     this.database = getFirestore();
   }
 
   /**
-   *
-   * @param {number} userId user id
    * @returns {TodoFirestoreRepository}
    */
-  static Instance(userId) {
-    if (this._instance) {
-      this._instance.userId = userId;
-      return this._instance;
-    }
-    return (this._instance = new this(userId));
+  static Instance() {
+    return this._instance ? this._instance : (this._instance = new this());
   }
 
   async insert(item) {
@@ -34,6 +25,13 @@ export class TodoFirestoreRepository {
   }
   async findAll() {
     const citiesRef = this.database.collection(this.collection);
+    const snapshot = await citiesRef.get();
+    return snapshot.docs.map((doc) => doc.data());
+  }
+  async findAllByUser(userId) {
+    const citiesRef = this.database
+      .collection(this.collection)
+      .where("userId", "==", userId);
     const snapshot = await citiesRef.get();
     return snapshot.docs.map((doc) => doc.data());
   }
