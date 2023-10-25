@@ -17,7 +17,7 @@ export default async function ListTodos() {
     });
 
     if (response.status === 401) {
-      redirect("/account");
+      redirect("/api/identity/signout");
     } else if (response.status === 500) {
       return [];
     }

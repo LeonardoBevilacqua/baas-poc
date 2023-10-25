@@ -8,27 +8,20 @@ export async function middleware(request) {
   const { url, nextUrl, cookies } = request;
   const { value: token } = cookies.get("token") ?? { value: null };
 
-  const hasVerifiedToken = !!token;
+  const hasToken = !!token;
   const isAuthPageRequested = isAuthPages(nextUrl.pathname);
 
   if (isAuthPageRequested) {
-    if (!hasVerifiedToken) {
-      const response = NextResponse.next();
-      response.cookies.delete("token");
-      return response;
-    }
-
-    const response = NextResponse.redirect(new URL(`/`, url));
+    const response = NextResponse.next();
+    response.cookies.delete("token");
     return response;
   }
 
-  if (!hasVerifiedToken) {
+  if (!hasToken) {
     const searchParams = new URLSearchParams(nextUrl.searchParams);
     searchParams.set("next", nextUrl.pathname);
 
-    const response = NextResponse.redirect(
-      new URL(`/account`, url)
-    );
+    const response = NextResponse.redirect(new URL(`/account`, url));
     response.cookies.delete("token");
 
     return response;
