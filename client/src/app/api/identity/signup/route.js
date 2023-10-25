@@ -1,4 +1,4 @@
-import { signUp } from "@/app/identity.service";
+import { signUp } from "@/app/api/identity/identity.service";
 
 export async function POST(request) {
   const body = await request.json();

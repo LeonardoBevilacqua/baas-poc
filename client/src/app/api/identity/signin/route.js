@@ -1,4 +1,4 @@
-import { signIn } from "@/app/identity.service";
+import { signIn } from "@/app/api/identity/identity.service";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {

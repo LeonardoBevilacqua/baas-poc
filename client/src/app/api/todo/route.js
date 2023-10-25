@@ -1,4 +1,4 @@
-import { addTodo, getTodosByUser } from "@/app/todo.service";
+import { addTodo, getTodosByUser } from "@/app/api/todo/todo.service";
 import { AdminIdentity } from "backend/infra/identity/admin.identity";
 import { NextResponse } from "next/server";
 

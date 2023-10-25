@@ -1,4 +1,4 @@
-import { signOutUser } from "@/app/identity.service";
+import { signOutUser } from "@/app/api/identity/identity.service";
 import { NextResponse } from "next/server";
 
 export async function GET() {
