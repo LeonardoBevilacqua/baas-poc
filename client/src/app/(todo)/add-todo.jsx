@@ -15,7 +15,6 @@ export default function AddTodo() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: new Date().getTime(),
         description,
         completed: "no",
       }),

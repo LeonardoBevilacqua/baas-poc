@@ -50,8 +50,8 @@ export class TodoRepository {
   async existsById(id) {
     return this.repo.existsById(id);
   }
-  async delete(id) {
-    this.repo.delete(id);
+  async delete(id, userId) {
+    this.repo.delete(id, userId);
   }
   async update(item) {
     return this.repo.update(item);

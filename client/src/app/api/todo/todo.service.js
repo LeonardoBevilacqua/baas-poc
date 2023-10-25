@@ -13,3 +13,7 @@ export async function getTodosByUser(userId) {
 export async function addTodo(todo) {
   return await todoRepo.insert(todo);
 }
+
+export async function deleteTodo(todoId) {
+  await todoRepo.delete(todoId);
+}

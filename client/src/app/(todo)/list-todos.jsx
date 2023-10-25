@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import DeleteTodoButton from "./delete-todo-button";
 
 export default async function ListTodos() {
   const todos = await fetchTodos();
@@ -45,7 +46,7 @@ export default async function ListTodos() {
               <td>{todo.completed}</td>
               <td>
                 <button>Toggle completed</button>
-                <button>Delete</button>
+                <DeleteTodoButton id={todo.id}></DeleteTodoButton>
               </td>
             </tr>
           ))}

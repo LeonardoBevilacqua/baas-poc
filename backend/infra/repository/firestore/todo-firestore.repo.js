@@ -19,21 +19,27 @@ export class TodoFirestoreRepository {
   }
 
   async insert(item) {
-    const res = await this.database.collection(this.collection).add(item);
+    await this.database.collection(this.collection).add(item);
 
     return item;
   }
   async findAll() {
     const citiesRef = this.database.collection(this.collection);
     const snapshot = await citiesRef.get();
-    return snapshot.docs.map((doc) => doc.data());
+    return snapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
   }
   async findAllByUser(userId) {
     const citiesRef = this.database
       .collection(this.collection)
       .where("userId", "==", userId);
     const snapshot = await citiesRef.get();
-    return snapshot.docs.map((doc) => doc.data());
+    return snapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
   }
   async findById(id) {
     throw Error("not implemented");
@@ -41,8 +47,12 @@ export class TodoFirestoreRepository {
   async existsById(id) {
     throw Error("not implemented");
   }
-  async delete(id) {
-    throw Error("not implemented");
+  async delete(id, userId) {
+    const reference = this.database.collection(this.collection).doc(id);
+    const data = (await reference.get()).data;
+    if (data.userId === userId) {
+      await reference.delete();
+    }
   }
   async update(item) {
     throw Error("not implemented");
