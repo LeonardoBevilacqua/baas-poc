@@ -4,9 +4,9 @@ import ListTodos from "./list-todos";
 export default function Home() {
   return (
     <main>
-      <h1>BaaS POC</h1>
+      <h2>BaaS POC</h2>
 
-      <h2>Todo</h2>
+      <h3>Todo</h3>
       <hr />
       <AddTodo />
       <hr />
