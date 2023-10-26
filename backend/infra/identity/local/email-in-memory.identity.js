@@ -11,11 +11,29 @@ export class EmailInMemoryIdentity {
   }
 
   async signIn(email, password) {
-    return;
+    return {
+      result: {
+        user: {
+          getIdToken: () => {
+            return "fake-id";
+          },
+          email,
+        },
+      },
+    };
   }
 
   async signUp(email, password) {
-    return;
+    return {
+      result: {
+        user: {
+          getIdToken: async () => {
+            return "fake-id";
+          },
+          email,
+        },
+      },
+    };
   }
 
   async signOutUser() {

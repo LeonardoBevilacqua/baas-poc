@@ -10,7 +10,7 @@ export class TodoInMemoryRepository {
   }
 
   async insert(item) {
-    this.items.push(item);
+    this.items.push({ ...item, id: new Date().getTime().toString() });
     return item;
   }
   async findAll() {
@@ -30,12 +30,12 @@ export class TodoInMemoryRepository {
   }
   async update(item, userId) {
     this.items = this.filterByUserId(userId).map((currentItem) =>
-      currentItem.id === item.id ? item : currentItem
+      currentItem.id === item.id ? { ...currentItem, ...item } : currentItem
     );
     return item;
   }
 
   filterByUserId(userId) {
-    return this.items.filter((item) => Number(item.userId) === Number(userId));
+    return this.items.filter((item) => item.userId === userId);
   }
 }

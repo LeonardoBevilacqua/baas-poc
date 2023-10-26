@@ -13,7 +13,7 @@ export class AdminInMemoryIdentity {
   }
 
   async isUserLogged(idToken) {
-    return false;
+    return true;
   }
 
   async getLoggedUserUid(idToken) {
