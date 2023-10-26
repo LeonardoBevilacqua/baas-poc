@@ -14,6 +14,8 @@ export async function addTodo(todo) {
   return await todoRepo.insert(todo);
 }
 
-export async function deleteTodo(todoId) {
-  await todoRepo.delete(todoId);
+export async function deleteTodo(id, userId) {
+  await todoRepo.delete(id, userId);
+}
+
 }

@@ -15,8 +15,10 @@ export async function DELETE(request, { params }) {
     return Unauthorized();
   }
 
+  const userId = await adminIdentity.getLoggedUserUid(token);
+
   const { id } = params;
-  await deleteTodo(id);
+  await deleteTodo(id, userId);
   return NextResponse.json(null, { status: 200 });
 }
 

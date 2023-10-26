@@ -49,7 +49,7 @@ export class TodoFirestoreRepository {
   }
   async delete(id, userId) {
     const reference = this.database.collection(this.collection).doc(id);
-    const data = (await reference.get()).data;
+    const data = (await reference.get()).data();
     if (data.userId === userId) {
       await reference.delete();
     }
