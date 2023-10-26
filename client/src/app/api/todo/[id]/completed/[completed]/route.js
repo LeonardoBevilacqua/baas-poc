@@ -1,9 +1,10 @@
-import { AdminIdentity } from "backend/infra/identity/admin.identity";
+import { unauthorized } from "@/app/api/http-response";
+import {
+  getLoggedUserUid,
+  isUserLogged,
+} from "@/app/api/identity/identity.service";
+import { updateTodo } from "@/app/api/todo/todo.service";
 import { NextResponse } from "next/server";
-import { updateTodo } from "../../../todo.service";
-
-const driver = "firebase";
-const adminIdentity = AdminIdentity.Instance(driver);
 
 /**
  * @param {import("next/server").NextRequest} request
@@ -12,22 +13,14 @@ const adminIdentity = AdminIdentity.Instance(driver);
  */
 export async function PATCH(request, { params }) {
   const token = request.cookies.get("token").value;
-  if (!(await isTokenValid(token))) {
-    return Unauthorized();
+  if (!(await isUserLogged(token))) {
+    return unauthorized();
   }
 
-  const userId = await adminIdentity.getLoggedUserUid(token);
+  const userId = await getLoggedUserUid(token);
 
   const { id, completed } = params;
   await updateTodo({ id, completed: completed === "true" }, userId);
 
   return NextResponse.json(null, { status: 200 });
-}
-
-async function isTokenValid(token) {
-  return !!token && (await adminIdentity.isUserLogged(token));
-}
-
-function Unauthorized() {
-  return NextResponse.json(null, { status: 401 });
 }

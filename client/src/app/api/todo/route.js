@@ -1,18 +1,18 @@
+import { unauthorized } from "@/app/api/http-response";
+import {
+  getLoggedUserUid,
+  isUserLogged,
+} from "@/app/api/identity/identity.service";
 import { addTodo, getTodosByUser } from "@/app/api/todo/todo.service";
-import { AdminIdentity } from "backend/infra/identity/admin.identity";
-import { NextResponse } from "next/server";
-
-const driver = "firebase";
-const adminIdentity = AdminIdentity.Instance(driver);
 
 export async function POST(request) {
   const token = request.cookies.get("token").value;
-  if (!(await isTokenValid(token))) {
-    return Unauthorized();
+  if (!(await isUserLogged(token))) {
+    return unauthorized();
   }
   const body = {
     ...(await request.json()),
-    userId: await adminIdentity.getLoggedUserUid(token),
+    userId: await getLoggedUserUid(token),
   };
   const todo = await addTodo(body);
   return Response.json({ todo }, { status: 201 });
@@ -20,19 +20,10 @@ export async function POST(request) {
 
 export async function GET(request) {
   const token = request.cookies.get("token").value;
-  if (!(await isTokenValid(token))) {
-    return Unauthorized();
+  if (!(await isUserLogged(token))) {
+    return unauthorized();
   }
-  return Response.json(
-    await getTodosByUser(await adminIdentity.getLoggedUserUid(token)),
-    { status: 200 }
-  );
-}
-
-async function isTokenValid(token) {
-  return !!token && (await adminIdentity.isUserLogged(token));
-}
-
-function Unauthorized() {
-  return NextResponse.json(null, { status: 401 });
+  return Response.json(await getTodosByUser(await getLoggedUserUid(token)), {
+    status: 200,
+  });
 }

@@ -1,9 +1,11 @@
+import { unauthorized } from "@/app/api/http-response";
+import {
+  getLoggedUserUid,
+  isUserLogged,
+} from "@/app/api/identity/identity.service";
 import { deleteTodo } from "@/app/api/todo/todo.service";
-import { AdminIdentity } from "backend/infra/identity/admin.identity";
 import { NextResponse } from "next/server";
 
-const driver = "firebase";
-const adminIdentity = AdminIdentity.Instance(driver);
 /**
  * @param {import("next/server").NextRequest} request
  * @param {{params: {id: string}}} params
@@ -11,21 +13,13 @@ const adminIdentity = AdminIdentity.Instance(driver);
  */
 export async function DELETE(request, { params }) {
   const token = request.cookies.get("token").value;
-  if (!(await isTokenValid(token))) {
-    return Unauthorized();
+  if (!(await isUserLogged(token))) {
+    return unauthorized();
   }
 
-  const userId = await adminIdentity.getLoggedUserUid(token);
+  const userId = await getLoggedUserUid(token);
 
   const { id } = params;
   await deleteTodo(id, userId);
   return NextResponse.json(null, { status: 200 });
-}
-
-async function isTokenValid(token) {
-  return !!token && (await adminIdentity.isUserLogged(token));
-}
-
-function Unauthorized() {
-  return NextResponse.json(null, { status: 401 });
 }
