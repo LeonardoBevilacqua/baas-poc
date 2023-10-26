@@ -17,14 +17,14 @@ export class TodoRepository {
    */
   constructor(type) {
     switch (type) {
-      case "local":
-        this.repo = TodoInMemoryRepository.Instance();
-        break;
-      case "firestore":
-        this.repo = TodoFirestoreRepository.Instance();
-        break;
-      default:
-        throw Error("not valid repo!");
+    case "local":
+      this.repo = TodoInMemoryRepository.Instance();
+      break;
+    case "firestore":
+      this.repo = TodoFirestoreRepository.Instance();
+      break;
+    default:
+      throw Error("not valid repo!");
     }
   }
 

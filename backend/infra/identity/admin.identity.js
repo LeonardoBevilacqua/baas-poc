@@ -10,14 +10,14 @@ export class AdminIdentity {
 
   constructor(type) {
     switch (type) {
-      case "local":
-        this.repo = AdminInMemoryIdentity.Instance();
-        break;
-      case "firebase":
-        this.repo = AdminAuthenticationIdentity.Instance();
-        break;
-      default:
-        throw Error("not valid identity!");
+    case "local":
+      this.repo = AdminInMemoryIdentity.Instance();
+      break;
+    case "firebase":
+      this.repo = AdminAuthenticationIdentity.Instance();
+      break;
+    default:
+      throw Error("not valid identity!");
     }
   }
 

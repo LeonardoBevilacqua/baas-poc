@@ -10,14 +10,14 @@ export class EmailIdentity {
 
   constructor(type) {
     switch (type) {
-      case "local":
-        this.repo = EmailInMemoryIdentity.Instance();
-        break;
-      case "firebase":
-        this.repo = EmailAuthenticationIdentity.Instance();
-        break;
-      default:
-        throw Error("not valid identity!");
+    case "local":
+      this.repo = EmailInMemoryIdentity.Instance();
+      break;
+    case "firebase":
+      this.repo = EmailAuthenticationIdentity.Instance();
+      break;
+    default:
+      throw Error("not valid identity!");
     }
   }
 

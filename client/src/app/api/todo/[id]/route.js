@@ -1,11 +1,11 @@
 import { deleteTodo } from "@/app/api/todo/todo.service";
 import { AdminIdentity } from "backend/infra/identity/admin.identity";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 const driver = "firebase";
 const adminIdentity = AdminIdentity.Instance(driver);
 /**
- * @param {NextRequest} request
+ * @param {import("next/server").NextRequest} request
  * @param {{params: {id: string}}} params
  * @returns
  */

@@ -21,7 +21,7 @@ export async function middleware(request) {
     const searchParams = new URLSearchParams(nextUrl.searchParams);
     searchParams.set("next", nextUrl.pathname);
 
-    const response = NextResponse.redirect(new URL(`/account`, url));
+    const response = NextResponse.redirect(new URL("/account", url));
     response.cookies.delete("token");
 
     return response;

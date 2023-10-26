@@ -15,6 +15,7 @@ export async function POST(request) {
     path: "/",
     httpOnly: true,
     sameSite: "strict",
+    // eslint-disable-next-line no-undef
     secure: process.env.NODE_ENV === "production",
   });
   return response;

@@ -1,4 +1,5 @@
 import { signUp } from "@/app/api/identity/identity.service";
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const body = await request.json();
