@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import Loading from "../loading";
 import AddTodo from "./add-todo";
 import ListTodos from "./list-todos";
 
@@ -10,7 +12,9 @@ export default function Home() {
       <hr />
       <AddTodo />
       <hr />
-      <ListTodos />
+      <Suspense fallback={<Loading />}>
+        <ListTodos />
+      </Suspense>
     </main>
   );
 }

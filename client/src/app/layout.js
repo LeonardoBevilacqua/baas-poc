@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import Navbar from "./components/navbar";
+import Loading from "./loading";
 import UserProvider from "./provider/user-provider";
 
 export const metadata = {
@@ -10,10 +12,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <UserProvider>
-          <Navbar></Navbar>
-          {children}
-        </UserProvider>
+        <Suspense fallback={<Loading />}>
+          <UserProvider>
+            <Navbar></Navbar>
+            {children}
+          </UserProvider>
+        </Suspense>
       </body>
     </html>
   );
