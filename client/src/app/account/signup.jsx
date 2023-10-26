@@ -1,15 +1,17 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../provider/user-provider";
 
 export default function Signup() {
+  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
   const handleForm = async (event) => {
     event.preventDefault();
-    await fetch("/api/identity/signup", {
+    const response = await fetch("/api/identity/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +22,10 @@ export default function Signup() {
       }),
     });
 
-    // else successful
+    const { user } = await response.json();
+    localStorage.setItem("email", user.email);
+    setUser({ email: user.email });
+
     return router.push("/");
   };
   return (
