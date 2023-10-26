@@ -1,7 +1,8 @@
 import { AdminIdentity } from "backend/infra/identity/admin.identity";
 import { EmailIdentity } from "backend/infra/identity/email.identity";
 
-const driver = "firebase";
+// eslint-disable-next-line no-undef
+const driver = process.env.BACKEND_DRIVER;
 const identity = EmailIdentity.Instance(driver);
 const adminIdentity = AdminIdentity.Instance(driver);
 

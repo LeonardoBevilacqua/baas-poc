@@ -20,7 +20,7 @@ export class TodoRepository {
     case "local":
       this.repo = TodoInMemoryRepository.Instance();
       break;
-    case "firestore":
+    case "firebase":
       this.repo = TodoFirestoreRepository.Instance();
       break;
     default:

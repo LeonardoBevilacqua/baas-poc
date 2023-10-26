@@ -1,5 +1,6 @@
 import { TodoRepository } from "backend/infra/repository/todo.repo";
-const driver = "firestore";
+// eslint-disable-next-line no-undef
+const driver = process.env.BACKEND_DRIVER;
 const todoRepo = TodoRepository.Instance(driver);
 
 export async function getTodos() {
