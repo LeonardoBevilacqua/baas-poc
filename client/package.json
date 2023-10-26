@@ -9,13 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
+    "backend": "../backend",
     "next": "13.5.4",
-    "backend": "../backend"
+    "react": "^18",
+    "react-dom": "^18"
   },
   "devDependencies": {
     "eslint": "^8",
-    "eslint-config-next": "13.5.4"
+    "eslint-config-next": "13.5.4",
+    "eslint-plugin-react": "^7.33.2"
   }
 }
