@@ -54,7 +54,14 @@ export class TodoFirestoreRepository {
       await reference.delete();
     }
   }
-  async update(item) {
-    throw Error("not implemented");
+  async update(item, userId) {
+    const reference = this.database.collection(this.collection).doc(item.id);
+    const data = (await reference.get()).data();
+    if (data.userId === userId) {
+      await reference.update({ ...item });
+      return null;
+    }
+
+    return item;
   }
 }

@@ -16,7 +16,7 @@ export default function AddTodo() {
       },
       body: JSON.stringify({
         description,
-        completed: "no",
+        completed: false,
       }),
     });
 

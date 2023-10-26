@@ -18,4 +18,6 @@ export async function deleteTodo(id, userId) {
   await todoRepo.delete(id, userId);
 }
 
+export async function updateTodo(item, userId) {
+  await todoRepo.update(item, userId);
 }

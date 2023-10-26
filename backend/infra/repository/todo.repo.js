@@ -53,7 +53,7 @@ export class TodoRepository {
   async delete(id, userId) {
     this.repo.delete(id, userId);
   }
-  async update(item) {
-    return this.repo.update(item);
+  async update(item, userId) {
+    return this.repo.update(item, userId);
   }
 }

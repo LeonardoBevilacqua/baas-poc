@@ -28,8 +28,8 @@ export class TodoInMemoryRepository {
   async delete(id, userId) {
     this.items = this.filterByUserId(userId).filter((item) => item.id !== id);
   }
-  async update(item) {
-    this.items = this.items.map((currentItem) =>
+  async update(item, userId) {
+    this.items = this.filterByUserId(userId).map((currentItem) =>
       currentItem.id === item.id ? item : currentItem
     );
     return item;
