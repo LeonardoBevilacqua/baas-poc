@@ -11,7 +11,8 @@
   "dependencies": {
     "encoding": "^0.1.13",
     "firebase": "^10.4.0",
-    "firebase-admin": "^11.11.0"
+    "firebase-admin": "^11.11.0",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "eslint": "^8.52.0"
