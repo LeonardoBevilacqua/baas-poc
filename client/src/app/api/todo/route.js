@@ -1,15 +1,13 @@
 import { unauthorized } from "@/app/api/http-response";
 import { AdminIdentityService } from "@/app/api/identity/identity.service";
 import { TodoService } from "@/app/api/todo/todo.service";
-import { AdminIdentity } from "backend/infra/identity/admin.identity";
+import { AdminSupabaseIdentity } from "backend/infra/identity/supabase/admin-supabase.identity";
 import { TodoSupabaseRepository } from "backend/infra/repository/supabase/todo-supabase.repo";
 
-const adminIdentityService = new AdminIdentityService(
-  // eslint-disable-next-line no-undef
-  AdminIdentity.Instance(process.env.BACKEND_DRIVER)
-);
-
 export async function POST(request) {
+  const adminIdentityService = new AdminIdentityService(
+    AdminSupabaseIdentity.Instance(request.cookies)
+  );
   const todoService = new TodoService(
     TodoSupabaseRepository.Instance(request.cookies)
   );
@@ -26,6 +24,9 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const adminIdentityService = new AdminIdentityService(
+    AdminSupabaseIdentity.Instance(request.cookies)
+  );
   const todoService = new TodoService(
     TodoSupabaseRepository.Instance(request.cookies)
   );
@@ -33,7 +34,9 @@ export async function GET(request) {
   if (!(await adminIdentityService.isUserLogged(token))) {
     return unauthorized();
   }
-  const todos = await todoService.getAll();
+  const todos = await todoService.getByUser(
+    await adminIdentityService.getLoggedUserUid(token)
+  );
   return Response.json(todos, {
     status: 200,
   });

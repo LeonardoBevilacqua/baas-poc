@@ -19,8 +19,6 @@ export class TodoSupabaseRepository {
   }
 
   async insert(item) {
-    // todo remove
-    delete item.userId;
     await this.database.from(this.collection).insert(item);
 
     return item;
@@ -48,10 +46,18 @@ export class TodoSupabaseRepository {
     throw Error("not implemented");
   }
   async delete(id, userId) {
-    await this.database.from(this.collection).delete().eq("id", id); //.eq("userId", userId);
+    await this.database
+      .from(this.collection)
+      .delete()
+      .eq("id", id)
+      .eq("userId", userId);
   }
   async update(item, userId) {
-    await this.database.from(this.collection).update(item).eq("id", item.id); //.eq("userId", userId);
+    await this.database
+      .from(this.collection)
+      .update(item)
+      .eq("id", item.id)
+      .eq("userId", userId);
 
     return item;
   }
