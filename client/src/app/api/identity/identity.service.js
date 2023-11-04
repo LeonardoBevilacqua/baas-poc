@@ -1,28 +1,33 @@
-import { AdminIdentity } from "backend/infra/identity/admin.identity";
-import { EmailIdentity } from "backend/infra/identity/email.identity";
+export class IdentityService {
+  identity;
+  constructor(identity) {
+    this.identity = identity;
+  }
 
-// eslint-disable-next-line no-undef
-const driver = process.env.BACKEND_DRIVER;
-const identity = EmailIdentity.Instance(driver);
-const adminIdentity = AdminIdentity.Instance(driver);
+  async signUp(email, password) {
+    return await this.identity.signUp(email, password);
+  }
 
+  async signIn(email, password) {
+    return await this.identity.signIn(email, password);
+  }
 
-export async function signUp(email, password) {
-  return await identity.signUp(email, password);
+  async signOutUser() {
+    await this.identity.signOutUser();
+  }
 }
 
-export async function signIn(email, password) {
-  return await identity.signIn(email, password);
-}
+export class AdminIdentityService {
+  adminIdentity;
+  constructor(adminIdentity) {
+    this.adminIdentity = adminIdentity;
+  }
 
-export async function signOutUser() {
-  await identity.signOutUser();
-}
+  async isUserLogged(token) {
+    return !!token && (await this.adminIdentity.isUserLogged(token));
+  }
 
-export async function isUserLogged(token) {
-  return !!token && (await adminIdentity.isUserLogged(token));
-}
-
-export async function getLoggedUserUid(token) {
-  return await adminIdentity.getLoggedUserUid(token);
+  async getLoggedUserUid(token) {
+    return await this.adminIdentity.getLoggedUserUid(token);
+  }
 }

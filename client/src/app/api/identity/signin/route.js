@@ -1,9 +1,11 @@
-import { signIn } from "@/app/api/identity/identity.service";
+import { IdentityService } from "@/app/api/identity/identity.service";
+import { EmailSupaBaseIdentity } from "backend/infra/identity/supabase/email-supabase.identity";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
+  const identityService = new IdentityService(EmailSupaBaseIdentity.Instance(request.cookies));
   const body = await request.json();
-  const result = await signIn(body.email, body.password);
+  const result = await identityService.signIn(body.email, body.password);
   const response = NextResponse.json(
     { user: result.result.user },
     { status: 200 }
