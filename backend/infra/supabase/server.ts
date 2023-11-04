@@ -7,7 +7,7 @@ export const createClient = (cookieStore) => {
     {
       cookies: {
         get(name) {
-          return cookieStore.get(name)?.value
+          return name && cookieStore.get(name)?.value
         },
         set(name, value, options) {
           try {
