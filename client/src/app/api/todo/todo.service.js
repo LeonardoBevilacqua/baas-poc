@@ -1,24 +1,26 @@
-import { TodoRepository } from "backend/infra/repository/todo.repo";
-// eslint-disable-next-line no-undef
-const driver = process.env.BACKEND_DRIVER;
-const todoRepo = TodoRepository.Instance(driver);
+export class TodoService {
+  repository;
+  constructor(repository) {
+    this.repository = repository;
+  }
 
-export async function getTodos() {
-  return (await todoRepo.findAll()) ?? [];
-}
+  async getAll() {
+    return (await this.repository.findAll()) ?? [];
+  }
 
-export async function getTodosByUser(userId) {
-  return (await todoRepo.findAllByUser(userId)) ?? [];
-}
+  async getByUser(userId) {
+    return (await this.repository.findAllByUser(userId)) ?? [];
+  }
 
-export async function addTodo(todo) {
-  return await todoRepo.insert(todo);
-}
+  async add(todo) {
+    return await this.repository.insert(todo);
+  }
 
-export async function deleteTodo(id, userId) {
-  await todoRepo.delete(id, userId);
-}
+  async delete(id, userId) {
+    await this.repository.delete(id, userId);
+  }
 
-export async function updateTodo(item, userId) {
-  await todoRepo.update(item, userId);
+  async update(item, userId) {
+    await this.repository.update(item, userId);
+  }
 }
