@@ -18,7 +18,12 @@ export class TodoInMemoryRepository {
   }
 
   async insert(item) {
-    this.#items.push({ ...item, id: new Date().getTime().toString() });
+    this.#items.push({
+      ...item,
+      id: new Date().getTime().toString(),
+      completed: false,
+      userId: this.#userId,
+    });
     return item;
   }
   async findAll() {
