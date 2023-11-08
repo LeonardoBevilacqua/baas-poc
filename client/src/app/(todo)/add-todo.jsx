@@ -1,44 +1,28 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { TodoService } from "@/app/api/todo/todo.service";
+import { TodoSupabaseRepository } from "backend/infra/repository/supabase/todo-supabase.repo";
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export default function AddTodo() {
-  const route = useRouter();
-  const [description, setDescription] = useState("");
-
-  async function submit(e) {
-    e.preventDefault();
-    await fetch("/api/todo", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        description,
-        completed: false,
-      }),
-    });
-
-    setDescription("");
-    route.refresh();
-    route.push("/");
-  }
+  const addAction = async (formData) => {
+    "use server";
+    const description = formData.get("description");
+    const cookieStore = cookies();
+    const todoService = new TodoService(
+      TodoSupabaseRepository.Instance(cookieStore)
+    );
+    await todoService.add({ description });
+    revalidatePath("/");
+  };
 
   return (
     <div>
-      <form action="/action_page.php">
+      <form action={addAction}>
         <fieldset>
           <legend>Add new todo:</legend>
           <label htmlFor="description">Description:</label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <button onClick={submit}>Add</button>
+          <input type="text" id="description" name="description" />
+          <button type="submit">Add</button>
         </fieldset>
       </form>
     </div>
