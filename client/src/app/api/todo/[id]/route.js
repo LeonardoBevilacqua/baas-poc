@@ -1,5 +1,5 @@
 import { TodoService } from "@/app/api/todo/todo.service";
-import { TodoSupabaseRepository } from "backend/infra/supabase/repository/todo-supabase.repo";
+import { TodoSupabaseRepository } from "backend/infra/repository";
 import { NextResponse } from "next/server";
 
 /**

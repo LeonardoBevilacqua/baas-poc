@@ -1,5 +1,5 @@
 import { IdentityService } from "@/app/api/identity/identity.service";
-import { EmailSupaBaseIdentity } from "backend/infra/supabase/identity/email-supabase.identity";
+import { EmailSupaBaseIdentity } from "backend/infra/identity";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
