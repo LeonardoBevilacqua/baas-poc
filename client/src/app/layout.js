@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import Navbar from "./components/navbar";
 import Loading from "./loading";
-import UserProvider from "./provider/user-provider";
 
 export const metadata = {
   title: "BaaS POC",
@@ -13,10 +12,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Suspense fallback={<Loading />}>
-          <UserProvider>
-            <Navbar></Navbar>
-            {children}
-          </UserProvider>
+          <Navbar></Navbar>
+          {children}
         </Suspense>
       </body>
     </html>

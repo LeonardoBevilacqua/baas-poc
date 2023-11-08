@@ -20,7 +20,8 @@ export class AdminSupabaseIdentity {
 
   async isUserLogged(idToken) {
     const {
-      data: { user }, error
+      data: { user },
+      error,
     } = await this.supabase.auth.getUser(idToken);
     if (error) {
       return false;
@@ -33,5 +34,23 @@ export class AdminSupabaseIdentity {
       data: { user },
     } = await this.supabase.auth.getUser(idToken);
     return user.id;
+  }
+
+  async getUserSession() {
+    const {
+      data: { session },
+      error,
+    } = await this.supabase.auth.getSession();
+
+    if (!session) {
+      return null;
+    }
+
+    if (error) {
+      console.log(error);
+      return null;
+    }
+
+    return session.user;
   }
 }

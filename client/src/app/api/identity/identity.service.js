@@ -30,4 +30,8 @@ export class AdminIdentityService {
   async getLoggedUserUid(token) {
     return await this.adminIdentity.getLoggedUserUid(token);
   }
+
+  async getUserSession() {
+    return this.adminIdentity.getUserSession();
+  }
 }

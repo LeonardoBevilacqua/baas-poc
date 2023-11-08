@@ -1,18 +1,41 @@
-"use client";
-import Link from "next/link";
-import { useContext } from "react";
-import { UserContext } from "../provider/user-provider";
+import {
+  AdminIdentityService,
+  IdentityService,
+} from "@/app/api/identity/identity.service";
+import { AdminSupabaseIdentity } from "backend/infra/identity/supabase/admin-supabase.identity";
+import { EmailSupaBaseIdentity } from "backend/infra/identity/supabase/email-supabase.identity";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function Navbar() {
-  const { user } = useContext(UserContext);
-  const { email } = user;
+export default async function Navbar() {
+  const cookieStore = cookies();
+  const adminIdentityService = new AdminIdentityService(
+    AdminSupabaseIdentity.Instance(cookieStore)
+  );
+  const { email } = (await adminIdentityService.getUserSession()) ?? {
+    email: null,
+  };
+
+  const signOutAction = async () => {
+    "use server";
+
+    const cookieStore = cookies();
+    const identityService = new IdentityService(
+      EmailSupaBaseIdentity.Instance(cookieStore)
+    );
+    await identityService.signOutUser();
+    return redirect("/account");
+  };
+
   return (
     <div>
       <h1>{email ? `Welcome ${email}` : "Please, login"}</h1>
       <ul>
         {email && (
           <li>
-            <Link href="/api/identity/signout">Logout</Link>
+            <form action={signOutAction}>
+              <button>Logout</button>
+            </form>
           </li>
         )}
       </ul>
