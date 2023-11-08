@@ -1,47 +1,33 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../provider/user-provider";
+import { IdentityService } from "@/app/api/identity/identity.service";
+import { EmailSupaBaseIdentity } from "backend/infra/identity/supabase/email-supabase.identity";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default function Signin() {
-  const { setUser } = useContext(UserContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
+  const signInAction = async (formData) => {
+    "use server";
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const cookieStore = cookies();
 
-  useEffect(() => {
-    localStorage.removeItem("email");
-    setUser({ email: null });
-  }, [setUser]);
+    const identityService = new IdentityService(
+      EmailSupaBaseIdentity.Instance(cookieStore)
+    );
+    const { error } = await identityService.signIn(email, password);
 
-  const handleForm = async (event) => {
-    event.preventDefault();
-    const response = await fetch("/api/identity/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-
-    const { user } = await response.json();
-    localStorage.setItem("email", user.email);
-    setUser({ email: user.email });
-
-    return router.push("/");
+    if (!error) {
+      return redirect("/");
+    }
   };
+
   return (
     <div className="wrapper">
       <div className="form-wrapper">
         <h1 className="mt-60 mb-30">Sign in</h1>
-        <form onSubmit={handleForm} className="form">
+        <form action={signInAction} className="form">
           <label htmlFor="email">
             <p>Email</p>
             <input
-              onChange={(e) => setEmail(e.target.value)}
               required
               type="email"
               name="email"
@@ -52,7 +38,6 @@ export default function Signin() {
           <label htmlFor="password">
             <p>Password</p>
             <input
-              onChange={(e) => setPassword(e.target.value)}
               required
               type="password"
               name="password"
