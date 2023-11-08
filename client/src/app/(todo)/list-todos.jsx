@@ -1,30 +1,18 @@
+import { TodoService } from "@/app/api/todo/todo.service";
+import { TodoSupabaseRepository } from "backend/infra/repository/supabase/todo-supabase.repo";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import DeleteTodoButton from "./delete-todo-button";
 import ToggleCompletedButton from "./toggle-completed-button";
 
 export default async function ListTodos() {
-  const todos = await fetchTodos();
+  const todos = await loadTodos();
 
-  async function fetchTodos() {
-    const token = cookies().get("token").value;
-    const response = await fetch("http://localhost:3000/api/todo", {
-      method: "GET",
-      headers: {
-        Cookie: `token=${token}`,
-      },
-      next: {
-        revalidate: 0,
-      },
-    });
-
-    if (response.status === 401) {
-      redirect("/api/identity/signout");
-    } else if (response.status === 500) {
-      return [];
-    }
-
-    return await response.json();
+  async function loadTodos() {
+    const todoService = new TodoService(
+      TodoSupabaseRepository.Instance(cookies())
+    );
+    const todos = await todoService.getAll();
+    return todos;
   }
 
   return (
