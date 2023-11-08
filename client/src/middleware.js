@@ -1,10 +1,20 @@
 import { NextResponse } from "next/server";
 import { createClient } from "backend/infra/supabase/middleware";
 
-const AUTH_PAGES = ["/account", "/api/identity/signin"];
+const AUTH_PAGES = ["/account"];
 const isAuthPages = (url) => AUTH_PAGES.includes(url);
 
 export async function middleware(request) {
+  // eslint-disable-next-line no-undef
+  switch (process.env.NEXT_PUBLIC_BACKEND) {
+  case "firebase":
+    return await firebaseMiddleware(request);
+  case "supabase":
+    return await supabaseMiddleware(request);
+  }
+}
+
+async function supabaseMiddleware(request) {
   try {
     // This `try/catch` block is only here for the interactive tutorial.
     // Feel free to remove once you have Supabase connected.
@@ -33,6 +43,32 @@ export async function middleware(request) {
       },
     });
   }
+}
+
+async function firebaseMiddleware(request) {
+  const { url, nextUrl, cookies } = request;
+  const { value: token } = cookies.get("token") ?? { value: null };
+
+  const hasToken = !!token;
+  const isAuthPageRequested = isAuthPages(nextUrl.pathname);
+
+  if (isAuthPageRequested) {
+    const response = NextResponse.next();
+    response.cookies.delete("token");
+    return response;
+  }
+
+  if (!hasToken) {
+    const searchParams = new URLSearchParams(nextUrl.searchParams);
+    searchParams.set("next", nextUrl.pathname);
+
+    const response = NextResponse.redirect(new URL("/account", url));
+    response.cookies.delete("token");
+
+    return response;
+  }
+
+  return NextResponse.next();
 }
 
 export const config = { matcher: ["/account", "/"] };
