@@ -16,9 +16,7 @@ export class EmailSupaBaseIdentity {
    * @returns {EmailSupaBaseIdentity}
    */
   static Instance(cookieStore) {
-    return this.#instance
-      ? this.#instance
-      : (this.#instance = new this(cookieStore));
+    return new this(cookieStore);
   }
 
   async signIn(email, password) {

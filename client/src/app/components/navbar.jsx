@@ -4,13 +4,12 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function Navbar() {
-  const cookieStore = cookies();
-
   const { email } = (await getEmail()) ?? {
     email: null,
   };
 
   async function getEmail() {
+    const cookieStore = cookies();
     const identityService = new IdentityService(
       EmailSupaBaseIdentity.Instance(cookieStore)
     );
@@ -19,6 +18,7 @@ export default async function Navbar() {
 
   const signOutAction = async () => {
     "use server";
+    const cookieStore = cookies();
     const identityService = new IdentityService(
       EmailSupaBaseIdentity.Instance(cookieStore)
     );
