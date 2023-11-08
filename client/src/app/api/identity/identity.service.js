@@ -15,23 +15,8 @@ export class IdentityService {
   async signOutUser() {
     await this.identity.signOutUser();
   }
-}
 
-export class AdminIdentityService {
-  adminIdentity;
-  constructor(adminIdentity) {
-    this.adminIdentity = adminIdentity;
-  }
-
-  async isUserLogged(token) {
-    return !!token && (await this.adminIdentity.isUserLogged(token));
-  }
-
-  async getLoggedUserUid(token) {
-    return await this.adminIdentity.getLoggedUserUid(token);
-  }
-
-  async getUserSession() {
-    return this.adminIdentity.getUserSession();
+  async getLoggedUser() {
+    return this.identity.getLoggedUser();
   }
 }

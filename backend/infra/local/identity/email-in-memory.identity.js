@@ -1,42 +1,53 @@
 /* eslint-disable no-unused-vars */
 export class EmailInMemoryIdentity {
-  static _instance;
+  /**
+   * @type {EmailInMemoryIdentity}
+   */
+  static #instance;
+  #email;
 
   /**
    *
    * @returns {EmailInMemoryIdentity}
    */
   static Instance() {
-    return this._instance ? this._instance : (this._instance = new this());
+    return this.#instance ? this.#instance : (this.#instance = new this());
   }
 
   async signIn(email, password) {
+    this.#email = email;
     return {
-      result: {
+      data: {
         user: {
-          getIdToken: () => {
-            return "fake-id";
-          },
+          id: "fake-id",
           email,
         },
       },
+      error: null,
     };
   }
 
   async signUp(email, password) {
+    this.#email = email;
     return {
-      result: {
+      data: {
         user: {
-          getIdToken: async () => {
-            return "fake-id";
-          },
+          id: "fake-id",
           email,
         },
       },
+      error: null,
     };
   }
 
   async signOutUser() {
     return;
+  }
+
+  async getLoggedUser() {
+    return {
+      email: this.#email,
+      id: "fake-id",
+    };
   }
 }
