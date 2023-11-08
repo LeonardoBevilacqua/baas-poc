@@ -1,4 +1,4 @@
-import { createClient } from "../../supabase/server";
+import { createClient } from "../server";
 
 export class EmailSupaBaseIdentity {
   static _instance;

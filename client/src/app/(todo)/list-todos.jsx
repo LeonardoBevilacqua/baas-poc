@@ -1,5 +1,5 @@
 import { TodoService } from "@/app/api/todo/todo.service";
-import { TodoSupabaseRepository } from "backend/infra/repository/supabase/todo-supabase.repo";
+import { TodoSupabaseRepository } from "backend/infra/supabase/repository/todo-supabase.repo";
 import { cookies } from "next/headers";
 import DeleteTodoButton from "./delete-todo-button";
 import ToggleCompletedButton from "./toggle-completed-button";

@@ -2,8 +2,8 @@ import {
   AdminIdentityService,
   IdentityService,
 } from "@/app/api/identity/identity.service";
-import { AdminSupabaseIdentity } from "backend/infra/identity/supabase/admin-supabase.identity";
-import { EmailSupaBaseIdentity } from "backend/infra/identity/supabase/email-supabase.identity";
+import { AdminSupabaseIdentity } from "backend/infra/supabase/identity/admin-supabase.identity";
+import { EmailSupaBaseIdentity } from "backend/infra/supabase/identity/email-supabase.identity";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

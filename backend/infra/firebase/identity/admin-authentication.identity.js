@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import admin_firebase_app from "../../firebase/admin-config";
+import admin_firebase_app from "../admin-config";
 
 export class AdminAuthenticationIdentity {
   static _instance;
