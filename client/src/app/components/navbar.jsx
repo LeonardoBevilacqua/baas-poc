@@ -5,16 +5,23 @@ import { redirect } from "next/navigation";
 
 export default async function Navbar() {
   const cookieStore = cookies();
-  const identityService = new IdentityService(
-    EmailSupaBaseIdentity.Instance(cookieStore)
-  );
-  const { email } = (await identityService.getLoggedUser()) ?? {
+
+  const { email } = (await getEmail()) ?? {
     email: null,
   };
 
+  async function getEmail() {
+    const identityService = new IdentityService(
+      EmailSupaBaseIdentity.Instance(cookieStore)
+    );
+    return await identityService.getLoggedUser();
+  }
+
   const signOutAction = async () => {
     "use server";
-
+    const identityService = new IdentityService(
+      EmailSupaBaseIdentity.Instance(cookieStore)
+    );
     await identityService.signOutUser();
     return redirect("/account");
   };
