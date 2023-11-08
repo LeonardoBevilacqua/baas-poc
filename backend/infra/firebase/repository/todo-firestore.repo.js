@@ -2,29 +2,35 @@ import { getFirestore } from "firebase-admin/firestore";
 import admin_firebase_app from "../admin-config";
 
 export class TodoFirestoreRepository {
-  static _instance;
-  database;
-  collection = "todo";
-  admin = admin_firebase_app;
+  /**
+   * @type {TodoFirestoreRepository}
+   */
+  static #instance;
+  #database;
+  #collection = "todo";
+  #admin = admin_firebase_app;
+  #userId;
 
   constructor() {
-    this.database = getFirestore();
+    this.#database = getFirestore();
   }
 
   /**
    * @returns {TodoFirestoreRepository}
    */
-  static Instance() {
-    return this._instance ? this._instance : (this._instance = new this());
+  static Instance(userId) {
+    const currentInstance = this.#instance ? this.#instance : (this.#instance = new this());
+    currentInstance.#userId = userId;
+    return currentInstance;
   }
 
   async insert(item) {
-    await this.database.collection(this.collection).add(item);
+    await this.#database.collection(this.#collection).add(item);
 
     return item;
   }
   async findAll() {
-    const citiesRef = this.database.collection(this.collection);
+    const citiesRef = this.#database.collection(this.#collection);
     const snapshot = await citiesRef.get();
     return snapshot.docs.map((doc) => ({
       ...doc.data(),
@@ -32,8 +38,8 @@ export class TodoFirestoreRepository {
     }));
   }
   async findAllByUser(userId) {
-    const citiesRef = this.database
-      .collection(this.collection)
+    const citiesRef = this.#database
+      .collection(this.#collection)
       .where("userId", "==", userId);
     const snapshot = await citiesRef.get();
     return snapshot.docs.map((doc) => ({
@@ -49,17 +55,17 @@ export class TodoFirestoreRepository {
   async existsById(id) {
     throw Error("not implemented");
   }
-  async delete(id, userId) {
-    const reference = this.database.collection(this.collection).doc(id);
+  async delete(id) {
+    const reference = this.#database.collection(this.#collection).doc(id);
     const data = (await reference.get()).data();
-    if (data.userId === userId) {
+    if (data.userId === this.#userId) {
       await reference.delete();
     }
   }
-  async update(item, userId) {
-    const reference = this.database.collection(this.collection).doc(item.id);
+  async update(item) {
+    const reference = this.#database.collection(this.#collection).doc(item.id);
     const data = (await reference.get()).data();
-    if (data.userId === userId) {
+    if (data.userId === this.#userId) {
       await reference.update({ ...item });
       return null;
     }

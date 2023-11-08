@@ -1,41 +1,46 @@
 import { createClient } from "../server";
 
 export class TodoSupabaseRepository {
-  static _instance;
-  database;
-  collection = "todo";
+  /**
+   * @type {TodoSupabaseRepository}
+   */
+  static #instance;
+  #database;
+  #collection = "todo";
 
   constructor(cookieStore) {
-    this.database = createClient(cookieStore);
+    this.#database = createClient(cookieStore);
   }
 
   /**
-   * @returns {TodoFirestoreRepository}
+   * @returns {TodoSupabaseRepository}
    */
   static Instance(cookieStore) {
-    return this._instance
-      ? this._instance
-      : (this._instance = new this(cookieStore));
+    return this.#instance
+      ? this.#instance
+      : (this.#instance = new this(cookieStore));
   }
 
   async insert(item) {
-    const { error } = await this.database.from(this.collection).insert(item);
+    const { error } = await this.#database.from(this.#collection).insert(item);
     if (error) {
-      console.log(error);
+      console.log("insert", error);
     }
 
     return item;
   }
   async findAll() {
-    const { data, error } = await this.database.from(this.collection).select();
+    const { data, error } = await this.#database
+      .from(this.#collection)
+      .select();
     if (error) {
-      console.log(error);
+      console.log("findAll", error);
     }
     return data;
   }
   async findAllByUser(userId) {
-    const { data } = await this.database
-      .from(this.collection)
+    const { data } = await this.#database
+      .from(this.#collection)
       .select()
       .eq("user_id", userId);
     return data;
@@ -49,15 +54,15 @@ export class TodoSupabaseRepository {
     throw Error("not implemented");
   }
   async delete(id) {
-    await this.database.from(this.collection).delete().eq("id", id);
+    await this.#database.from(this.#collection).delete().eq("id", id);
   }
   async update(item) {
-    const { error } = await this.database
-      .from(this.collection)
+    const { error } = await this.#database
+      .from(this.#collection)
       .update(item)
       .eq("id", item.id);
     if (error) {
-      console.log(error);
+      console.log("update", error);
     }
 
     return item;
