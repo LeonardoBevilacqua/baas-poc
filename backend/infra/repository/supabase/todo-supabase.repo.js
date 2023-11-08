@@ -19,7 +19,10 @@ export class TodoSupabaseRepository {
   }
 
   async insert(item) {
-    await this.database.from(this.collection).insert(item);
+    const { error } = await this.database.from(this.collection).insert(item);
+    if (error) {
+      console.log(error);
+    }
 
     return item;
   }
@@ -34,7 +37,7 @@ export class TodoSupabaseRepository {
     const { data } = await this.database
       .from(this.collection)
       .select()
-      .eq("userId", userId);
+      .eq("user_id", userId);
     return data;
   }
   // eslint-disable-next-line no-unused-vars
@@ -45,19 +48,17 @@ export class TodoSupabaseRepository {
   async existsById(id) {
     throw Error("not implemented");
   }
-  async delete(id, userId) {
-    await this.database
-      .from(this.collection)
-      .delete()
-      .eq("id", id)
-      .eq("userId", userId);
+  async delete(id) {
+    await this.database.from(this.collection).delete().eq("id", id);
   }
-  async update(item, userId) {
-    await this.database
+  async update(item) {
+    const { error } = await this.database
       .from(this.collection)
       .update(item)
-      .eq("id", item.id)
-      .eq("userId", userId);
+      .eq("id", item.id);
+    if (error) {
+      console.log(error);
+    }
 
     return item;
   }
