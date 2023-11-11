@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "backend/infra/supabase/middleware";
+import { createClient } from "@/utils/supabase/middleware";
 
 const AUTH_PAGES = ["/account"];
 const isAuthPages = (url) => AUTH_PAGES.includes(url);

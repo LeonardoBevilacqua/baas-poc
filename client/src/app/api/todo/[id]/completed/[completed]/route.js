@@ -1,4 +1,5 @@
 import { TodoService } from "@/app/api/todo/todo.service";
+import { createClient } from "@/utils/supabase/server";
 import { TodoSupabaseRepository } from "backend/infra/repository";
 import { NextResponse } from "next/server";
 
@@ -9,7 +10,7 @@ import { NextResponse } from "next/server";
  */
 export async function PATCH(request, { params }) {
   const todoService = new TodoService(
-    TodoSupabaseRepository.Instance(request.cookies)
+    new TodoSupabaseRepository(createClient(request.cookies))
   );
 
   const { id, completed } = params;

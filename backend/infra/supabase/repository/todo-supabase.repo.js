@@ -1,28 +1,16 @@
-import { createClient } from "../server";
-
 export class TodoSupabaseRepository {
-  /**
-   * @type {TodoSupabaseRepository}
-   */
-  static #instance;
-  #database;
+  #supabase;
   #collection = "todo";
 
-  constructor(cookieStore) {
-    this.#database = createClient(cookieStore);
-  }
-
   /**
-   * @returns {TodoSupabaseRepository}
+   * @param {import("@supabase/supabase-js").SupabaseClient<any, "public", any>} client
    */
-  static Instance(cookieStore) {
-    return this.#instance
-      ? this.#instance
-      : (this.#instance = new this(cookieStore));
+  constructor(client) {
+    this.#supabase = client;
   }
 
   async insert(item) {
-    const { error } = await this.#database.from(this.#collection).insert(item);
+    const { error } = await this.#supabase.from(this.#collection).insert(item);
     if (error) {
       console.log("insert", error);
     }
@@ -30,7 +18,7 @@ export class TodoSupabaseRepository {
     return item;
   }
   async findAll() {
-    const { data, error } = await this.#database
+    const { data, error } = await this.#supabase
       .from(this.#collection)
       .select();
     if (error) {
@@ -39,7 +27,7 @@ export class TodoSupabaseRepository {
     return data;
   }
   async findAllByUser(userId) {
-    const { data } = await this.#database
+    const { data } = await this.#supabase
       .from(this.#collection)
       .select()
       .eq("user_id", userId);
@@ -54,10 +42,10 @@ export class TodoSupabaseRepository {
     throw Error("not implemented");
   }
   async delete(id) {
-    await this.#database.from(this.#collection).delete().eq("id", id);
+    await this.#supabase.from(this.#collection).delete().eq("id", id);
   }
   async update(item) {
-    const { error } = await this.#database
+    const { error } = await this.#supabase
       .from(this.#collection)
       .update(item)
       .eq("id", item.id);

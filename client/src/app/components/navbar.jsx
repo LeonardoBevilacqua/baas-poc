@@ -1,4 +1,5 @@
 import { IdentityService } from "@/app/api/identity/identity.service";
+import { createClient } from "@/utils/supabase/server";
 import { EmailSupaBaseIdentity } from "backend/infra/identity";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -11,7 +12,7 @@ export default async function Navbar() {
   async function getEmail() {
     const cookieStore = cookies();
     const identityService = new IdentityService(
-      EmailSupaBaseIdentity.Instance(cookieStore)
+      new EmailSupaBaseIdentity(createClient(cookieStore))
     );
     return await identityService.getLoggedUser();
   }
@@ -20,7 +21,7 @@ export default async function Navbar() {
     "use server";
     const cookieStore = cookies();
     const identityService = new IdentityService(
-      EmailSupaBaseIdentity.Instance(cookieStore)
+      new EmailSupaBaseIdentity(createClient(cookieStore))
     );
     await identityService.signOutUser();
     return redirect("/account");

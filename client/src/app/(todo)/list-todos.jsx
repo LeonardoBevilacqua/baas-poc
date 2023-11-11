@@ -1,4 +1,5 @@
 import { TodoService } from "@/app/api/todo/todo.service";
+import { createClient } from "@/utils/supabase/server";
 import { TodoSupabaseRepository } from "backend/infra/repository";
 import { cookies } from "next/headers";
 import DeleteTodoButton from "./delete-todo-button";
@@ -8,8 +9,9 @@ export default async function ListTodos() {
   const todos = await loadTodos();
 
   async function loadTodos() {
+    const cookieStore = cookies();
     const todoService = new TodoService(
-      TodoSupabaseRepository.Instance(cookies())
+      new TodoSupabaseRepository(createClient(cookieStore))
     );
     const todos = await todoService.getAll();
     return todos;

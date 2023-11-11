@@ -1,4 +1,5 @@
 import { IdentityService } from "@/app/api/identity/identity.service";
+import { createClient } from "@/utils/supabase/server";
 import { EmailSupaBaseIdentity } from "backend/infra/identity";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -11,7 +12,7 @@ export default function Signup() {
     const cookieStore = cookies();
 
     const identityService = new IdentityService(
-      EmailSupaBaseIdentity.Instance(cookieStore)
+      new EmailSupaBaseIdentity(createClient(cookieStore))
     );
     const { error } = await identityService.signUp(email, password);
 

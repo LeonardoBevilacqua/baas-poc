@@ -1,22 +1,11 @@
-import { createClient } from "../server";
-
 export class EmailSupaBaseIdentity {
-  /**
-   * @type {EmailSupaBaseIdentity}
-   */
-  static #instance;
   #supabase;
 
-  constructor(cookieStore) {
-    this.#supabase = createClient(cookieStore);
-  }
-
   /**
-   *
-   * @returns {EmailSupaBaseIdentity}
+   * @param {import("@supabase/supabase-js").SupabaseClient<any, "public", any>} client
    */
-  static Instance(cookieStore) {
-    return new this(cookieStore);
+  constructor(client) {
+    this.#supabase = client;
   }
 
   async signIn(email, password) {

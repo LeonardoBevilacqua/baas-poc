@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.0.10",
     "backend": "../backend",
     "next": "^14.0.1",
     "react": "^18",
